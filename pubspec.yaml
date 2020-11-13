@@ -26,6 +26,7 @@ dependencies:
   cupertino_icons: ^0.1.3
   flash: ^1.3.1
   flutter_svg: ^0.19.1
+  lottie: ^0.7.0+1
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +69,5 @@ flutter:
     - family: Heavy
       fonts:
         - asset: fonts/Gilroy-Heavy.ttf
-  #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

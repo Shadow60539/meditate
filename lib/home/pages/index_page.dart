@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:yoga_flutter/core/design/colors.dart';
 import 'package:yoga_flutter/home/pages/journey_page.dart';
 import 'package:yoga_flutter/home/pages/today_page.dart';
 import 'package:yoga_flutter/home/pages/you_page.dart';
@@ -19,10 +20,34 @@ class IndexPageState extends State<IndexPage>
     with SingleTickerProviderStateMixin {
   final ValueNotifier<int> pageNumberNotifier = ValueNotifier<int>(0);
   DateTime currentBackPressTime;
+  bool showBNB = true;
   final ScrollController scrollController = ScrollController();
+  AnimationController _animationController;
 
   @override
   void initState() {
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 400));
+    scrollController
+      ..addListener(() {
+        if (scrollController.position.userScrollDirection ==
+            ScrollDirection.reverse) {
+          setState(() {
+            _animationController.forward();
+            showBNB = false;
+          });
+        } else if (scrollController.position.userScrollDirection ==
+            ScrollDirection.forward) {
+          setState(() {
+            _animationController.reverse().whenComplete(() => showBNB = true);
+          });
+        } else {
+          setState(() {
+            _animationController.forward();
+            showBNB = false;
+          });
+        }
+      });
     super.initState();
   }
 
@@ -55,6 +80,9 @@ class IndexPageState extends State<IndexPage>
                 pageNumberNotifier.value = 0;
                 return false;
               } else {
+                setState(() {
+                  showBNB = true;
+                });
                 scrollController.animateTo(
                   0.0,
                   curve: Curves.easeOut,
@@ -99,78 +127,92 @@ class IndexPageState extends State<IndexPage>
                 body: IndexedStack(
                   index: pageNumberNotifier.value,
                   children: [
-                    TodayPage(),
                     JourneyPage(
                       scrollController: scrollController,
                     ),
+                    TodayPage(),
                     YouPage(),
                   ],
                 ),
-                bottomNavigationBar: AnimatedContainer(
-                  curve: Curves.decelerate,
-                  duration: const Duration(milliseconds: 400),
-                  child: Visibility(
-                    visible: true,
-                    child: BottomNavigationBar(
-                      showUnselectedLabels: true,
-                      type: BottomNavigationBarType.fixed,
-                      backgroundColor: Colors.white,
-                      currentIndex: pageNumberNotifier.value,
-                      onTap: _selectedTab,
-                      unselectedIconTheme: IconThemeData(color: Colors.black12),
-                      selectedLabelStyle:
-                          TextStyle(fontSize: 12, fontFamily: 'Gilroy'),
-                      unselectedLabelStyle: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'Gilroy',
-                          color: Colors.black12),
-                      unselectedItemColor: Colors.black87,
-                      items: <BottomNavigationBarItem>[
-                        BottomNavigationBarItem(
-                          icon: SvgPicture.asset(
-                            'assets/today.svg',
-                            height: 20,
-                          ),
-                          title: Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text(
-                              'Today',
-                              style: TextStyle(
-                                  color: Colors.black54, fontFamily: 'Medium'),
+                bottomNavigationBar: SlideTransition(
+                  position:
+                      Tween<Offset>(begin: Offset(0, 0), end: Offset(0, 2))
+                          .animate(_animationController),
+                  child: AnimatedCrossFade(
+                      firstChild: SizedBox.shrink(),
+                      secondChild: BottomNavigationBar(
+                        showUnselectedLabels: true,
+                        type: BottomNavigationBarType.fixed,
+                        backgroundColor: Colors.white,
+                        currentIndex: pageNumberNotifier.value,
+                        onTap: _selectedTab,
+                        unselectedIconTheme:
+                            IconThemeData(color: Colors.black12),
+                        selectedLabelStyle:
+                            TextStyle(fontSize: 12, fontFamily: 'Gilroy'),
+                        unselectedLabelStyle: TextStyle(
+                            fontSize: 12,
+                            fontFamily: 'Gilroy',
+                            color: Colors.black12),
+                        unselectedItemColor: Colors.black87,
+                        items: <BottomNavigationBarItem>[
+                          BottomNavigationBarItem(
+                            icon: SvgPicture.asset(
+                              'assets/journey.svg',
+                              height: 20,
+                            ),
+                            title: Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                'Journey',
+                                style: TextStyle(
+                                    color: pageNumberNotifier.value == 0
+                                        ? kBlack
+                                        : Colors.black54,
+                                    fontFamily: 'Medium'),
+                              ),
                             ),
                           ),
-                        ),
-                        BottomNavigationBarItem(
-                          icon: SvgPicture.asset(
-                            'assets/journey.svg',
-                            height: 20,
-                          ),
-                          title: Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text(
-                              'Journey',
-                              style: TextStyle(
-                                  color: Colors.black54, fontFamily: 'Medium'),
+                          BottomNavigationBarItem(
+                            icon: SvgPicture.asset(
+                              'assets/today.svg',
+                              height: 20,
+                            ),
+                            title: Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                'Today',
+                                style: TextStyle(
+                                    color: pageNumberNotifier.value == 1
+                                        ? kBlack
+                                        : Colors.black54,
+                                    fontFamily: 'Medium'),
+                              ),
                             ),
                           ),
-                        ),
-                        BottomNavigationBarItem(
-                          icon: SvgPicture.asset(
-                            'assets/you.svg',
-                            height: 20,
-                          ),
-                          title: Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text(
-                              'You',
-                              style: TextStyle(
-                                  color: Colors.black54, fontFamily: 'Medium'),
+                          BottomNavigationBarItem(
+                            icon: SvgPicture.asset(
+                              'assets/you.svg',
+                              height: 20,
+                            ),
+                            title: Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                'You',
+                                style: TextStyle(
+                                    color: pageNumberNotifier.value == 2
+                                        ? kBlack
+                                        : Colors.black54,
+                                    fontFamily: 'Medium'),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
+                        ],
+                      ),
+                      crossFadeState: showBNB
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
+                      duration: const Duration(milliseconds: 200)),
                 ),
               ),
             ),

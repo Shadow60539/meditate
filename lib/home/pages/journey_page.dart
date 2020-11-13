@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yoga_flutter/core/design/colors.dart';
 import 'package:yoga_flutter/home/utils/white_circle_painter.dart';
+import 'package:yoga_flutter/home/widgets/fade_animations.dart';
 import 'package:yoga_flutter/home/widgets/habit_builder.dart';
 import 'package:yoga_flutter/home/widgets/routine_builder.dart';
 import 'package:yoga_flutter/home/widgets/stage_builder.dart';
@@ -25,28 +26,43 @@ class _JourneyPageState extends State<JourneyPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Hey Sanjeev',
-                    style: TextStyle(
-                        color: kGrey, fontFamily: 'Medium', fontSize: 24),
+                  FadeFromUpAnimation(
+                    begin: 0.0,
+                    end: 0.2,
+                    drop: -1.0,
+                    child: Text(
+                      'Hey Sanjeev',
+                      style: TextStyle(
+                          color: kGrey, fontFamily: 'Medium', fontSize: 24),
+                    ),
                   ),
                   SizedBox(
                     height: 12,
                   ),
-                  Text(
-                    'Your journey',
-                    style: TextStyle(
-                        color: kBlack, fontFamily: 'Bold', fontSize: 34),
+                  FadeFromUpAnimation(
+                    begin: 0.3,
+                    end: 0.5,
+                    drop: -0.2,
+                    child: Text(
+                      'Your journey',
+                      style: TextStyle(
+                          color: kBlack, fontFamily: 'Bold', fontSize: 34),
+                    ),
                   ),
                   SizedBox(
                     height: 12,
                   ),
-                  Text(
-                    'Build your routine through a stage by stage progression',
-                    style: TextStyle(
-                        color: Color(0xff2e3238),
-                        fontFamily: 'Medium',
-                        fontSize: 14),
+                  FadeFromUpAnimation(
+                    begin: 0.5,
+                    end: 0.7,
+                    drop: -0.1,
+                    child: Text(
+                      'Build your routine through a stage by stage progression',
+                      style: TextStyle(
+                          color: Color(0xff2e3238),
+                          fontFamily: 'Medium',
+                          fontSize: 14),
+                    ),
                   ),
                 ],
               ),
@@ -68,7 +84,7 @@ class _JourneyPageState extends State<JourneyPage> {
       child: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         controller: widget.scrollController,
-        padding: EdgeInsets.only(bottom: 25,top: 30),
+        padding: EdgeInsets.only(bottom: 25, top: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

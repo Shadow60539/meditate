@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:yoga_flutter/core/design/colors.dart';
 
 class StageBuilder extends StatefulWidget {
@@ -44,7 +44,8 @@ class _StageBuilderState extends State<StageBuilder> {
   Widget stageHolder({String stageTitle, int stageNumber}) {
     return Padding(
       padding: EdgeInsets.only(
-          left: stageNumber == 1 ? MediaQuery.of(context).size.width * 0.18 : 0),
+          left:
+              stageNumber == 1 ? MediaQuery.of(context).size.width * 0.18 : 0),
       child: Column(
         children: [
           SizedBox(
@@ -69,6 +70,7 @@ class _StageBuilderState extends State<StageBuilder> {
               ),
               Container(
                 height: 145,
+                alignment: Alignment.bottomCenter,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: kWhite,
@@ -80,10 +82,15 @@ class _StageBuilderState extends State<StageBuilder> {
                   ],
                 ),
                 width: 145,
-                child: Image.asset(
-                  'assets/stage.png',
-                  height: 145,
-                  width: 145,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(1000),
+                  child: Lottie.asset(
+                    'assets/peace.json',
+                    height: 145,
+                    width: 145,
+                    frameRate: FrameRate.max,
+                    alignment: Alignment.bottomCenter,
+                  ),
                 ),
               ),
             ],
