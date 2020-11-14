@@ -3,6 +3,9 @@ import 'package:lottie/lottie.dart';
 import 'package:yoga_flutter/core/design/colors.dart';
 
 class StageBuilder extends StatefulWidget {
+  final ScrollController scrollController;
+
+  const StageBuilder({Key key, this.scrollController}) : super(key: key);
   @override
   _StageBuilderState createState() => _StageBuilderState();
 }
@@ -10,6 +13,7 @@ class StageBuilder extends StatefulWidget {
 class _StageBuilderState extends State<StageBuilder> {
   @override
   Widget build(BuildContext context) {
+    bool isWhite = widget.scrollController.position.pixels > 147 ? true : false;
     return LimitedBox(
         maxHeight: 340,
         child: SingleChildScrollView(
@@ -21,27 +25,50 @@ class _StageBuilderState extends State<StageBuilder> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              stageHolder(stageTitle: 'Activator', stageNumber: 1),
-              Container(
-                margin: EdgeInsets.only(bottom: 100),
-                width: MediaQuery.of(context).size.width * 0.4,
-                height: 20,
-                color: kWhite,
+              stageHolder(
+                  stageTitle: 'Activator', stageNumber: 1, color: isWhite),
+              Transform.translate(
+                offset: Offset(isWhite ? -10 : 0, 0),
+                child: AnimatedContainer(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(100),
+                      bottomRight: Radius.circular(100),
+                    ),
+                    color: isWhite ? Color(0xffBCFBFF) : kWhite,
+                  ),
+                  margin: EdgeInsets.only(bottom: 100),
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  height: 20,
+                  duration: const Duration(milliseconds: 100),
+                ),
               ),
-              stageHolder(stageTitle: 'Hustler', stageNumber: 2),
-              Container(
-                margin: EdgeInsets.only(bottom: 100),
-                width: MediaQuery.of(context).size.width * 0.4,
-                height: 20,
-                color: kWhite,
+              stageHolder(
+                  stageTitle: 'Hustler', stageNumber: 2, color: isWhite),
+              Transform.translate(
+                offset: Offset(isWhite ? 10 : 0, 0),
+                child: AnimatedContainer(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(100),
+                      bottomLeft: Radius.circular(100),
+                    ),
+                    color: isWhite ? Color(0xffBCFBFF) : kWhite,
+                  ),
+                  margin: EdgeInsets.only(bottom: 100),
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  height: 20,
+                  duration: const Duration(milliseconds: 100),
+                ),
               ),
-              stageHolder(stageTitle: 'Fighter', stageNumber: 3),
+              stageHolder(
+                  stageTitle: 'Fighter', stageNumber: 3, color: isWhite),
             ],
           ),
         ));
   }
 
-  Widget stageHolder({String stageTitle, int stageNumber}) {
+  Widget stageHolder({String stageTitle, int stageNumber, bool color}) {
     return Padding(
       padding: EdgeInsets.only(
           left:
@@ -61,7 +88,7 @@ class _StageBuilderState extends State<StageBuilder> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                        color: Color(0xffBCFBFF),
+                        color: color ? Color(0xffBCFBFF) : kWhite,
                         blurRadius: 0,
                         spreadRadius: 0,
                         offset: Offset(0, 0)),
@@ -100,7 +127,10 @@ class _StageBuilderState extends State<StageBuilder> {
           ),
           Text(
             'STAGE $stageNumber',
-            style: TextStyle(fontFamily: 'Medium', fontSize: 10),
+            style: TextStyle(
+              fontFamily: 'Medium',
+              fontSize: 10,
+            ),
           ),
           SizedBox(
             height: 10,

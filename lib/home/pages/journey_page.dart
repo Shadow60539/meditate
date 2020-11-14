@@ -16,11 +16,31 @@ class JourneyPage extends StatefulWidget {
 
 class _JourneyPageState extends State<JourneyPage> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    double temp() {
+      if (!widget.scrollController.hasClients) {
+        return 1.0;
+      } else if (widget.scrollController.position.pixels <= 0) {
+        return 1.0;
+      } else if (widget.scrollController.position.pixels > 100 &&
+          widget.scrollController.position.pixels < 200) {
+        return (widget.scrollController.position.pixels * 0.01);
+      } else if (widget.scrollController.position.pixels > 200) {
+        return 2.0;
+      }
+      return 1.0;
+    }
+
     Widget journeyHeading() => CustomPaint(
-          painter: WhiteCirclePainter(),
-          child: Container(
-            height: 565 * 0.4,
+          painter: WhiteCirclePainter(temp: temp()),
+          child: AnimatedContainer(
+            height: 565 * 0.5,
+            duration: const Duration(milliseconds: 1000),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Column(
@@ -96,7 +116,9 @@ class _JourneyPageState extends State<JourneyPage> {
                 style: TextStyle(fontFamily: 'Medium', fontSize: 20),
               ),
             ),
-            StageBuilder(),
+            StageBuilder(
+              scrollController: widget.scrollController,
+            ),
             SizedBox(
               height: 40,
             ),
