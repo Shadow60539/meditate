@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yoga_flutter/core/design/colors.dart';
+import 'package:yoga_flutter/home/utils/value_notifiers.dart';
 import 'package:yoga_flutter/home/utils/white_circle_painter.dart';
 import 'package:yoga_flutter/home/widgets/fade_animations.dart';
 import 'package:yoga_flutter/home/widgets/habit_builder.dart';
@@ -15,11 +16,6 @@ class JourneyPage extends StatefulWidget {
 }
 
 class _JourneyPageState extends State<JourneyPage> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     double temp() {
@@ -38,9 +34,8 @@ class _JourneyPageState extends State<JourneyPage> {
 
     Widget journeyHeading() => CustomPaint(
           painter: WhiteCirclePainter(temp: temp()),
-          child: AnimatedContainer(
+          child: Container(
             height: 565 * 0.5,
-            duration: const Duration(milliseconds: 1000),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Column(
@@ -101,54 +96,91 @@ class _JourneyPageState extends State<JourneyPage> {
           ],
         ),
       ),
-      child: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        controller: widget.scrollController,
-        padding: EdgeInsets.only(bottom: 25, top: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            journeyHeading(),
-            Padding(
-              padding: const EdgeInsets.only(left: 30),
-              child: Text(
-                '7 stage process to build routine',
-                style: TextStyle(fontFamily: 'Medium', fontSize: 20),
-              ),
+      child: ValueListenableBuilder(
+        valueListenable: isScrollingNotifier,
+        builder: (BuildContext context, bool isScrolling, Widget child) {
+          return SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            controller: widget.scrollController,
+            padding: EdgeInsets.only(bottom: 25, top: 30),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                journeyHeading(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 30),
+                  child: Text(
+                    '7 stage process to build routine',
+                    style: TextStyle(fontFamily: 'Medium', fontSize: 20),
+                  ),
+                ),
+                StageBuilder(
+                  scrollController: widget.scrollController,
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                AnimatedContainer(
+                  curve: Curves.easeInToLinear,
+                  transform: Matrix4.translationValues(
+                      0,
+                      isScrolling
+                          ? widget.scrollController.position.pixels * 0.1
+                          : 0,
+                      0),
+                  duration: const Duration(milliseconds: 100),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Text(
+                      'Learn about Morning routines',
+                      style: TextStyle(fontFamily: 'Medium', fontSize: 20),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                RoutineBuilder(
+                  scrollController: widget.scrollController,
+                ),
+                SizedBox(
+                  height: 27,
+                ),
+                AnimatedContainer(
+                  curve: Curves.easeInToLinear,
+                  transform: Matrix4.translationValues(
+                      0,
+                      isScrolling
+                          ? widget.scrollController.position.pixels * 0.1
+                          : 0,
+                      0),
+                  duration: const Duration(milliseconds: 100),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: Text(
+                      'Explore the habits',
+                      style: TextStyle(fontFamily: 'Medium', fontSize: 20),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                Center(
+                    child: AnimatedContainer(
+                        curve: Curves.easeInToLinear,
+                        transform: Matrix4.translationValues(
+                            0,
+                            isScrolling
+                                ? widget.scrollController.position.pixels * 0.1
+                                : 0,
+                            0),
+                        duration: const Duration(milliseconds: 100),
+                        child: HabitBuilder())),
+              ],
             ),
-            StageBuilder(
-              scrollController: widget.scrollController,
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Text(
-                'Learn about Morning routines',
-                style: TextStyle(fontFamily: 'Medium', fontSize: 20),
-              ),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            RoutineBuilder(),
-            SizedBox(
-              height: 27,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: Text(
-                'Explore the habits',
-                style: TextStyle(fontFamily: 'Medium', fontSize: 20),
-              ),
-            ),
-            SizedBox(
-              height: 16,
-            ),
-            Center(child: HabitBuilder()),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

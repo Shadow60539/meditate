@@ -31,10 +31,12 @@ class _StageBuilderState extends State<StageBuilder> {
                 offset: Offset(isWhite ? -10 : 0, 0),
                 child: AnimatedContainer(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(100),
-                      bottomRight: Radius.circular(100),
-                    ),
+                    borderRadius: !isWhite
+                        ? BorderRadius.zero
+                        : BorderRadius.only(
+                            topRight: Radius.circular(100),
+                            bottomRight: Radius.circular(100),
+                          ),
                     color: isWhite ? Color(0xffBCFBFF) : kWhite,
                   ),
                   margin: EdgeInsets.only(bottom: 100),
@@ -49,10 +51,12 @@ class _StageBuilderState extends State<StageBuilder> {
                 offset: Offset(isWhite ? 10 : 0, 0),
                 child: AnimatedContainer(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(100),
-                      bottomLeft: Radius.circular(100),
-                    ),
+                    borderRadius: !isWhite
+                        ? BorderRadius.zero
+                        : BorderRadius.only(
+                            topLeft: Radius.circular(100),
+                            bottomLeft: Radius.circular(100),
+                          ),
                     color: isWhite ? Color(0xffBCFBFF) : kWhite,
                   ),
                   margin: EdgeInsets.only(bottom: 100),
